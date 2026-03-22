@@ -1,0 +1,13 @@
+package com.code.Nutriai;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class NutriaiApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
