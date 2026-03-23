@@ -30,4 +30,12 @@ public class MealPlanEntry {
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
+
+
+    public enum MealType {
+        BREAKFAST,
+        LUNCH,
+        DINNER,
+        SNACK
+    }
 }
