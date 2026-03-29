@@ -15,7 +15,7 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    // ✅ Get all recipes (for showing cards like in UI)
+    // ✅ Get all recipes
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
