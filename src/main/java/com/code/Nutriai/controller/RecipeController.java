@@ -4,10 +4,7 @@ import com.code.Nutriai.model.Recipe;
 import com.code.Nutriai.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/recipe")
@@ -22,4 +19,17 @@ public class RecipeController {
         Recipe saved = recipeService.saveRecipe(recipe);
         return ResponseEntity.ok(saved);
     }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Recipe> get(@PathVariable Long id){
+
+        Recipe recipe = recipeService.getRecipeById(id);
+
+        if (recipe != null) {
+            return ResponseEntity.ok(recipe);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
