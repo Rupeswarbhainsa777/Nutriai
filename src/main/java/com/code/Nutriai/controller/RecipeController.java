@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("api/recipe")
 public class RecipeController {
@@ -30,6 +33,12 @@ public class RecipeController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/getall")
+    public ResponseEntity<List<Recipe>> getAll(){
+        List<Recipe> all = recipeService.getAllRecipes();
+        return ResponseEntity.ok(all);
     }
 
 }
