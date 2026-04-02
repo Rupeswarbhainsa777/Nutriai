@@ -41,4 +41,10 @@ public class MealPlanService {
     }
 
 
+    public MealPlan getMealPlanById(Long id){
+
+        return mealPlanRepository.findById(id).orElseThrow(()->new RuntimeException("Meal plan not found"));
+    }
+
+
 }
