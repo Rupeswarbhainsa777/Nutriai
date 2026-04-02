@@ -1,5 +1,6 @@
 package com.code.Nutriai.controller;
 
+import com.code.Nutriai.dto.LoginRequest;
 import com.code.Nutriai.model.User;
 import com.code.Nutriai.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,17 @@ public class AuthController {
         }
         return ResponseEntity.ok(user1);
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest){
+        User user = authService.login(loginRequest);
+
+        if(user == null){
+            return ResponseEntity.status(401).build();
+        }
+        System.out.println(loginRequest);
+        return ResponseEntity.ok(user);
     }
 
 
