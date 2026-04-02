@@ -1,6 +1,7 @@
 package com.code.Nutriai.service;
 
 import com.code.Nutriai.model.MealPlan;
+import com.code.Nutriai.model.MealPlanEntry;
 import com.code.Nutriai.model.User;
 import com.code.Nutriai.repository.MealPlanEntryRepository;
 import com.code.Nutriai.repository.MealPlanRepository;
@@ -31,8 +32,8 @@ public class MealPlanService {
     private final RecipeRepository recipeRepository;
 
 
-    public MealPlan createMealPlan(Long id, LocalDate localDate){
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+    public MealPlan createMealPlan(Long id, LocalDate localDate) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         MealPlan mealPlan = new MealPlan();
         mealPlan.setUser(user);
@@ -41,13 +42,25 @@ public class MealPlanService {
     }
 
 
-    public MealPlan getMealPlanById(Long id){
+    public MealPlan getMealPlanById(Long id) {
 
-        return mealPlanRepository.findById(id).orElseThrow(()->new RuntimeException("Meal plan not found"));
+        return mealPlanRepository.findById(id).orElseThrow(() -> new RuntimeException("Meal plan not found"));
     }
 
+    public void deleteEntry(Long mealPlanId,
+                                          String day,
+                                          MealPlanEntry.MealType mealType,
+                                          Long recipeId){
 
-    private void deleteMealPlan(Long id){
+        MealPlanEntry entry = mealPlanEntryRepository
+                .findByMealPlanIdAndDayAndMealType(mealPlanId,day,mealType)
+                .orElseThrow(()->new RuntimeException("Entry not found"));
+
+            mealPlanEntryRepository.delete(entry);
+    }
+
+      // Delete full meal plan
+    private void deleteMealPlan(Long id) {
         mealPlanRepository.deleteById(id);
     }
 
