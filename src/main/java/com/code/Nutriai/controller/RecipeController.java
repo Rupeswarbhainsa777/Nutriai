@@ -50,4 +50,10 @@ public class RecipeController {
 
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
