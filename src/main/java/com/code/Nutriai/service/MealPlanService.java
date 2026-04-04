@@ -9,89 +9,122 @@ import com.code.Nutriai.repository.MealPlanRepository;
 import com.code.Nutriai.repository.RecipeRepository;
 import com.code.Nutriai.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class MealPlanService {
 
-
-    @Autowired
     private final MealPlanEntryRepository mealPlanEntryRepository;
-    @Autowired
     private final MealPlanRepository mealPlanRepository;
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final RecipeRepository recipeRepository;
 
+    // ✅ Create Meal Plan
+    public ResponseEntity<?> createMealPlan(Long id, LocalDate localDate) {
+        try {
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-    public MealPlan createMealPlan(Long id, LocalDate localDate) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+            MealPlan mealPlan = new MealPlan();
+            mealPlan.setUser(user);
+            mealPlan.setWeekStartDate(localDate);
 
-        MealPlan mealPlan = new MealPlan();
-        mealPlan.setUser(user);
-        mealPlan.setWeekStartDate(localDate);
-        return mealPlanRepository.save(mealPlan);
-    }
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(mealPlanRepository.save(mealPlan));
 
-
-    public MealPlan getMealPlanById(Long id) {
-
-        return mealPlanRepository.findById(id).orElseThrow(() -> new RuntimeException("Meal plan not found"));
-    }
-
-    public List<MealPlanEntry> getEntries(Long mealPlanId) {
-        return mealPlanEntryRepository.findByMealPlanId(mealPlanId);
-    }
-
-    public MealPlanEntry addOrUpdateEntry(Long mealPlanId,
-                                          String day,
-                                          MealPlanEntry.MealType mealType,
-                                          Long recipeId) {
-
-        MealPlan mealPlan = mealPlanRepository.findById(mealPlanId).
-                orElseThrow(() -> new RuntimeException("Meal plan not found"));
-        Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new RuntimeException("Recipe not found"));
-
-        MealPlanEntry mealPlanEntry = mealPlanEntryRepository.findByMealPlanIdAndDayAndMealType(mealPlanId, day, mealType)
-                .orElse(null);
-
-        if (mealPlanEntry == null) {
-            mealPlanEntry = new MealPlanEntry();
-            mealPlanEntry.setMealPlan(mealPlan);
-            mealPlanEntry.setDay(day);
-            mealPlanEntry.setMealType(mealType);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         }
-        mealPlanEntry.setRecipe(recipe);
-        return mealPlanEntryRepository.save(mealPlanEntry);
-
     }
 
+    // ✅ Get Meal Plan
+    public ResponseEntity<?> getMealPlanById(Long id) {
+        try {
+            MealPlan mealPlan = mealPlanRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Meal plan not found"));
 
-    public void deleteEntry(Long mealPlanId,
-                            String day,
-                            MealPlanEntry.MealType mealType,
-                            Long recipeId) {
+            return ResponseEntity.ok(mealPlan);
 
-        MealPlanEntry entry = mealPlanEntryRepository
-                .findByMealPlanIdAndDayAndMealType(mealPlanId, day, mealType)
-                .orElseThrow(() -> new RuntimeException("Entry not found"));
-
-        mealPlanEntryRepository.delete(entry);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
     }
 
-
-    // Delete full meal plan
-    private void deleteMealPlan(Long id) {
-        mealPlanRepository.deleteById(id);
+    // ✅ Get Entries
+    public ResponseEntity<?> getEntries(Long mealPlanId) {
+        List<MealPlanEntry> entries = mealPlanEntryRepository.findByMealPlanId(mealPlanId);
+        return ResponseEntity.ok(entries);
     }
 
+    // ✅ Add or Update Entry
+    public ResponseEntity<?> addOrUpdateEntry(Long mealPlanId,
+                                              String day,
+                                              MealPlanEntry.MealType mealType,
+                                              Long recipeId) {
+        try {
+            MealPlan mealPlan = mealPlanRepository.findById(mealPlanId)
+                    .orElseThrow(() -> new RuntimeException("Meal plan not found"));
 
+            Recipe recipe = recipeRepository.findById(recipeId)
+                    .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+            MealPlanEntry entry = mealPlanEntryRepository
+                    .findByMealPlanIdAndDayAndMealType(mealPlanId, day, mealType)
+                    .orElse(null);
+
+            if (entry == null) {
+                entry = new MealPlanEntry();
+                entry.setMealPlan(mealPlan);
+                entry.setDay(day);
+                entry.setMealType(mealType);
+            }
+
+            entry.setRecipe(recipe);
+
+            return ResponseEntity.ok(mealPlanEntryRepository.save(entry));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+    // ✅ Delete Entry
+    public ResponseEntity<?> deleteEntry(Long mealPlanId,
+                                         String day,
+                                         MealPlanEntry.MealType mealType) {
+        try {
+            MealPlanEntry entry = mealPlanEntryRepository
+                    .findByMealPlanIdAndDayAndMealType(mealPlanId, day, mealType)
+                    .orElseThrow(() -> new RuntimeException("Entry not found"));
+
+            mealPlanEntryRepository.delete(entry);
+
+            return ResponseEntity.ok("Entry deleted successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+    }
+
+    // ✅ Delete Meal Plan
+    public ResponseEntity<?> deleteMealPlan(Long id) {
+        try {
+            mealPlanRepository.deleteById(id);
+            return ResponseEntity.ok("Meal plan deleted successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+    }
 }
