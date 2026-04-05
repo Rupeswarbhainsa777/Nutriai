@@ -61,6 +61,16 @@ public class FitnessService {
         ));
     }
 
+    public ResponseEntity<?> deleteFitnessData(Long id) {
+        try {
+            fitnessRepository.deleteById(id);
+            return ResponseEntity.ok("Fitness record deleted");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        }
+    }
+
 
 
 }
