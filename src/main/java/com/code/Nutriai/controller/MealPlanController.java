@@ -2,6 +2,7 @@ package com.code.Nutriai.controller;
 
 
 import com.code.Nutriai.dto.MealPlanRequest;
+import com.code.Nutriai.model.MealPlanEntry;
 import com.code.Nutriai.service.MealPlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,14 @@ public class MealPlanController {
     public ResponseEntity<?> getMealPlanById(@PathVariable  Long id){
         return mealPlanService.getMealPlanById(id);
     }
+    @PostMapping("/{mealPlanId}/entry")
+    public ResponseEntity<?> addOrUpdateEntry(
+            @PathVariable Long mealPlanId,
+            @RequestParam String day,
+            @RequestParam MealPlanEntry.MealType mealType,
+            @RequestParam Long recipeId){
+        return mealPlanService.addOrUpdateEntry(mealPlanId,day,mealType,recipeId);
+    }
+
 
 }
