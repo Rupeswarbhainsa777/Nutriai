@@ -29,18 +29,25 @@ public class MealPlanService {
     public ResponseEntity<?> createMealPlan(Long id, LocalDate localDate) {
         try {
             User user = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+            // Check if a plan already exists for this week
+            boolean exists = mealPlanRepository
+                    .existsByUserIdAndWeekStartDate(id, localDate);
+            if (exists) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Meal plan already exists for this week");
+            }
 
             MealPlan mealPlan = new MealPlan();
             mealPlan.setUser(user);
             mealPlan.setWeekStartDate(localDate);
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(mealPlanRepository.save(mealPlan));
+            MealPlan saved = mealPlanRepository.save(mealPlan);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

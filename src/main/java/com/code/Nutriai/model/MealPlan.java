@@ -2,12 +2,15 @@ package com.code.Nutriai.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,14 +24,13 @@ public class MealPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate weekStartDate;
-
-    // Many meal plans belong to one user
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore  // prevents circular reference
     private User user;
 
-    // One meal plan has many entries
-    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MealPlanEntry> entries;
+    private LocalDate weekStartDate;
+
+    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<MealPlanEntry> entries = new ArrayList<>();
 }

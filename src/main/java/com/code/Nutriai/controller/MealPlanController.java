@@ -1,19 +1,32 @@
 package com.code.Nutriai.controller;
 
 
+import com.code.Nutriai.dto.MealPlanRequest;
 import com.code.Nutriai.service.MealPlanService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/mealplan")
+@RequiredArgsConstructor
+@RequestMapping("/api/meal-plan")
 public class MealPlanController {
 
-    @Autowired
-    private MealPlanService mealPlanService;
+
+    private final MealPlanService mealPlanService;
+
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createMealPlan(@RequestBody MealPlanRequest request) {
+        return mealPlanService.createMealPlan(
+                request.getUserId(),
+                java.time.LocalDate.parse(request.getWeekStartDate())
+        );
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.code.Nutriai.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,7 @@ public class User {
     private int age;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<MealPlan> mealPlans;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
