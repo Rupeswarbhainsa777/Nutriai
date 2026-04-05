@@ -33,6 +33,10 @@ public class MealPlanController {
     public ResponseEntity<?> getMealPlanById(@PathVariable Long id) {
         return mealPlanService.getMealPlanById(id);
     }
+    @GetMapping("/{mealPlanId}/entries")
+    public ResponseEntity<?> getEntries(@PathVariable Long mealPlanId) {
+        return mealPlanService.getEntries(mealPlanId);
+    }
 
     @PostMapping("/{mealPlanId}/entry")
     public ResponseEntity<?> addOrUpdateEntry(

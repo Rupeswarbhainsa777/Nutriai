@@ -1,5 +1,6 @@
 package com.code.Nutriai.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class MealPlanEntry {
     // Many entries belong to one meal plan
     @ManyToOne
     @JoinColumn(name = "meal_plan_id", nullable = false)
+    @JsonIgnore
     private MealPlan mealPlan;
 
     // Each entry is linked to one recipe
