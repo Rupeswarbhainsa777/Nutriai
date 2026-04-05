@@ -33,6 +33,7 @@ public class MealPlanController {
     public ResponseEntity<?> getMealPlanById(@PathVariable Long id) {
         return mealPlanService.getMealPlanById(id);
     }
+
     @GetMapping("/{mealPlanId}/entries")
     public ResponseEntity<?> getEntries(@PathVariable Long mealPlanId) {
         return mealPlanService.getEntries(mealPlanId);
@@ -54,5 +55,9 @@ public class MealPlanController {
         return mealPlanService.deleteEntry(mealPlanId, day, mealType);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMealPlan(@PathVariable Long id) {
+        return mealPlanService.deleteMealPlan(id);
+    }
 
 }
