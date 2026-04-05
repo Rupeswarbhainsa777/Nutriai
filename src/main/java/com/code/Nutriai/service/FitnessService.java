@@ -40,6 +40,27 @@ public class FitnessService {
         return ResponseEntity.ok(
                 fitnessRepository.findByUserIdAndDate(userId, date));
     }
+    public ResponseEntity<?> getFitnessSummary(Long userId, String range) {
+        LocalDate from = range.equals("week")
+                ? LocalDate.now().minusDays(7)
+                : LocalDate.now().minusDays(30);
+
+        List<FitnessData> data = fitnessRepository
+                .findByUserIdAndDateBetween(userId, from, LocalDate.now());
+
+        int totalSteps    = data.stream().mapToInt(FitnessData::getSteps).sum();
+        int totalCalories = data.stream().mapToInt(FitnessData::getCaloriesBurned).sum();
+        int totalMinutes  = data.stream().mapToInt(FitnessData::getActiveMinutes).sum();
+
+        return ResponseEntity.ok(java.util.Map.of(
+                "range",          range,
+                "totalSteps",     totalSteps,
+                "totalCalories",  totalCalories,
+                "totalMinutes",   totalMinutes,
+                "avgDailySteps",  data.isEmpty() ? 0 : totalSteps / data.size()
+        ));
+    }
+
 
 
 }
