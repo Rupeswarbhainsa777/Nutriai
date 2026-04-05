@@ -30,16 +30,24 @@ public class MealPlanController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMealPlanById(@PathVariable  Long id){
+    public ResponseEntity<?> getMealPlanById(@PathVariable Long id) {
         return mealPlanService.getMealPlanById(id);
     }
+
     @PostMapping("/{mealPlanId}/entry")
     public ResponseEntity<?> addOrUpdateEntry(
             @PathVariable Long mealPlanId,
             @RequestParam String day,
             @RequestParam MealPlanEntry.MealType mealType,
-            @RequestParam Long recipeId){
-        return mealPlanService.addOrUpdateEntry(mealPlanId,day,mealType,recipeId);
+            @RequestParam Long recipeId) {
+        return mealPlanService.addOrUpdateEntry(mealPlanId, day, mealType, recipeId);
+    }
+
+    @DeleteMapping("/{mealPlanId}/entry")
+    public ResponseEntity<?> deleteEntry(@PathVariable Long mealPlanId,
+                                         @RequestParam String day,
+                                         @RequestParam MealPlanEntry.MealType mealType) {
+        return mealPlanService.deleteEntry(mealPlanId, day, mealType);
     }
 
 
