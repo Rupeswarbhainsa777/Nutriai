@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class FitnessService {
@@ -28,6 +30,10 @@ public class FitnessService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
         }
+    }
+    public ResponseEntity<?> getFitnessDataByUser(Long userId) {
+        List<FitnessData> data = fitnessRepository.findByUserId(userId);
+        return ResponseEntity.ok(data);
     }
 
 
