@@ -28,5 +28,9 @@ public class MealPlanController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getMealPlanById(@PathVariable  Long id){
+        return mealPlanService.getMealPlanById(id);
+    }
 
 }
