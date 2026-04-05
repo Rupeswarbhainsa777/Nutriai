@@ -1,0 +1,34 @@
+package com.code.Nutriai.service;
+
+import com.code.Nutriai.model.FitnessData;
+import com.code.Nutriai.model.User;
+import com.code.Nutriai.repository.FitnessRepository;
+import com.code.Nutriai.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class FitnessService {
+
+
+    private final FitnessRepository fitnessRepository;
+    private final UserRepository userRepository;
+
+    public ResponseEntity<?> syncFitnessData(FitnessData fitnessData) {
+        try {
+            User user = userRepository.findById(fitnessData.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            fitnessData.setUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(fitnessRepository.save(fitnessData));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+
+}
