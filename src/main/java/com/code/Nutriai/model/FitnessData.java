@@ -1,9 +1,12 @@
 package com.code.Nutriai.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Data
@@ -17,14 +20,18 @@ public class FitnessData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnoreProperties({"password", "email"}) // prevent unnecessary data
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     private LocalDate date;
-    private int steps;
-    private int caloriesBurned;
-    private int activeMinutes;
+
+    private Integer steps;
+    private Integer caloriesBurned;
+    private Integer activeMinutes;
 
     @Enumerated(EnumType.STRING)
     private WorkoutType workoutType;
