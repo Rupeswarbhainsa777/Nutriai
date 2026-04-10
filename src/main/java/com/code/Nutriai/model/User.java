@@ -38,8 +38,7 @@ public class User {
     @JsonManagedReference
     private List<MealPlan> mealPlans;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<FitnessData> fitnessData;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserPreference preference;
