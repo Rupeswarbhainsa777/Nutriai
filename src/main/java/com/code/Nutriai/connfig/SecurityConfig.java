@@ -26,5 +26,39 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 
+    @Autowired
+    private MyUserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+
+        security.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+
+                .httpBasic(Customizer.withDefaults()).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return security.build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        return provider;
+    }
+
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 }
