@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/recipe")
+@CrossOrigin
 public class RecipeController {
 
 

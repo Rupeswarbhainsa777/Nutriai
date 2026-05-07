@@ -15,33 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 
-    @Autowired
-    private AuthService authService;
-
-    @PostMapping("/reg")
-    public ResponseEntity<User> registration(@RequestBody  User user){
-
-
-        User user1 = authService.registration(user);
-
-        if(user1 == null){
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(user1);
-
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest){
-        User user = authService.login(loginRequest);
-
-        if(user == null){
-            return ResponseEntity.status(401).build();
-        }
-        System.out.println(loginRequest);
-        return ResponseEntity.ok(user);
-    }
-
 
 
 }
