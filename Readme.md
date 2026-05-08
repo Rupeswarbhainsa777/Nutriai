@@ -297,12 +297,4 @@ Key properties in `application.properties`:
 
 ---
 
-## 👨‍💻 Author
-
-**Rupesh** — [GitHub: Rupeswarbhainsa777](https://github.com/Rupeswarbhainsa777)
-
----
-
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
+## 👨‍💻 To be continued 
