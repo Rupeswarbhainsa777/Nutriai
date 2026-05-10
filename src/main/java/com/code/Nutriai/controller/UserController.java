@@ -5,10 +5,7 @@ import com.code.Nutriai.model.User;
 import com.code.Nutriai.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,14 +18,23 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> users(){
+    public ResponseEntity<List<User>> users() {
 
-        return  userService.allUsers();
+        return userService.allUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> user(@PathVariable long id){
+    public ResponseEntity<Optional<User>> user(@PathVariable Long id) {
         return userService.user(id);
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.update(id, user);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        return userService.deleteUser(id);
     }
 }
