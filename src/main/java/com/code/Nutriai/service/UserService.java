@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,6 +22,12 @@ public class UserService {
         List<User> allUser = repository.findAll();
 
         return ResponseEntity.ok(allUser);
+    }
+
+    public ResponseEntity<Optional<User>> user(long id){
+        Optional<User> user = repository.findById(id);
+
+        return ResponseEntity.ok(user);
     }
 
 
