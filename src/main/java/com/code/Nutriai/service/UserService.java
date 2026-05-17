@@ -56,4 +56,11 @@ public class UserService {
         return ResponseEntity.ok("User deleted successfully with id: " + id);
     }
 
+    public ResponseEntity<User> getCurrentUser(String email) {
+        User user =repository.findByEmail(email);
+
+        return ResponseEntity.ok(user);
+
+    }
+
 }

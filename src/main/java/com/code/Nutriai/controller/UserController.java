@@ -5,6 +5,7 @@ import com.code.Nutriai.model.User;
 import com.code.Nutriai.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,13 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrent(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.getCurrentUser(email).getBody();
+        return ResponseEntity.ok(user);
+
     }
 }
