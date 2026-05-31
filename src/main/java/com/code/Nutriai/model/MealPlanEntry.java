@@ -19,6 +19,7 @@ public class MealPlanEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDate mealDate;
 
     @Enumerated(EnumType.STRING)
