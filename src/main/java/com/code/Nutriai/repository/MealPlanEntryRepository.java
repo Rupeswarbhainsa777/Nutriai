@@ -2,19 +2,19 @@ package com.code.Nutriai.repository;
 
 import com.code.Nutriai.model.MealPlanEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface MealPlanEntryRepository  extends JpaRepository<MealPlanEntry,Long> {
+public interface MealPlanEntryRepository
+        extends JpaRepository<MealPlanEntry, Long> {
 
     List<MealPlanEntry> findByMealPlanId(Long mealPlanId);
 
-    Optional<MealPlanEntry> findByMealPlanIdAndDayAndMealType(
+    Optional<MealPlanEntry> findByMealPlanIdAndMealDateAndMealType(
             Long mealPlanId,
-            String day,
+            LocalDate mealDate,
             MealPlanEntry.MealType mealType
     );
 }
