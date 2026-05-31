@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,22 +19,19 @@ public class MealPlanEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String day; // e.g., Monday, Tuesday
+    private LocalDate mealDate;
 
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    // Many entries belong to one meal plan
     @ManyToOne
     @JoinColumn(name = "meal_plan_id", nullable = false)
     @JsonIgnore
     private MealPlan mealPlan;
 
-    // Each entry is linked to one recipe
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
-
 
     public enum MealType {
         BREAKFAST,
