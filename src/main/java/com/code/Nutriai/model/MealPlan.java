@@ -1,8 +1,5 @@
 package com.code.Nutriai.model;
 
-
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,11 +23,16 @@ public class MealPlan {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore  // prevents circular reference
+    @JsonIgnore
     private User user;
 
     private LocalDate weekStartDate;
 
-    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "mealPlan",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private List<MealPlanEntry> entries = new ArrayList<>();
 }
