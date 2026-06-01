@@ -1,6 +1,7 @@
 package com.code.Nutriai.service;
 
 import com.code.Nutriai.dto.LoginRequest;
+import com.code.Nutriai.dto.LoginResponse;
 import com.code.Nutriai.model.User;
 import com.code.Nutriai.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,15 +53,43 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public String login(LoginRequest request) {
+//    public String login(LoginRequest request) {
+//
+//        Authentication authentication =
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
+//        if(authentication.isAuthenticated()){
+//            return jwtService.generateToken(request.getEmail());
+//        }
+//        return "Fail";
+//
+//
+//    }
+    public LoginResponse login(LoginRequest request) {
 
         Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-        if(authentication.isAuthenticated()){
-            return jwtService.generateToken(request.getEmail());
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                request.getEmail(),
+                                request.getPassword()));
+
+        if(authentication.isAuthenticated()) {
+
+            User user = userRepository.findByEmail(request.getEmail());
+
+            if (user == null) {
+                throw new RuntimeException("User not found");
+            }
+
+            String token = jwtService.generateToken(user.getEmail());
+
+            return new LoginResponse(
+                    token,
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail()
+            );
         }
-        return "Fail";
 
-
+        throw new RuntimeException("Invalid credentials");
     }
 }
