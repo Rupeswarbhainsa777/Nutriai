@@ -21,6 +21,7 @@ public class MealPlanController {
             @RequestParam Long userId,
             @RequestParam LocalDate weekStartDate) {
 
+        System.out.println("Calling");
         return mealPlanService.createMealPlan(
                 userId,
                 weekStartDate
