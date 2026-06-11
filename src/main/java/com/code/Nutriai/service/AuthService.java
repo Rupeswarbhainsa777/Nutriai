@@ -30,12 +30,12 @@ public class AuthService {
 
     public User registration(User user) {
 
-        // check duplicate email
+
         if(userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
-        // encode password
+
         user.setPassword(encoder.encode(user.getPassword()));
 
         // set user in MealPlans
@@ -45,7 +45,7 @@ public class AuthService {
             });
         }
 
-        // set user in Preference
+
         if(user.getPreference() != null) {
             user.getPreference().setUser(user);
         }
@@ -53,17 +53,7 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-//    public String login(LoginRequest request) {
-//
-//        Authentication authentication =
-//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
-//        if(authentication.isAuthenticated()){
-//            return jwtService.generateToken(request.getEmail());
-//        }
-//        return "Fail";
-//
-//
-//    }
+
     public LoginResponse login(LoginRequest request) {
 
         Authentication authentication =

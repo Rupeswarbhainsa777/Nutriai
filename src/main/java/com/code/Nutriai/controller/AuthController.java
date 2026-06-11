@@ -17,6 +17,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+
+
     @PostMapping("/reg")
     public User registration(@RequestBody User user) {
 
@@ -34,6 +36,9 @@ public class AuthController {
                 authService.login(loginRequest)
         );
     }
+
+
+
 
 
 }
